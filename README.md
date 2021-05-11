@@ -1,29 +1,19 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Every functionality should be in separate branch.
+After the functionality is completed, there shoudl be a PR ( Pull request ), that must be approved.
 
-### What is this repository for? ###
+Branch naming should be the following:
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+- **feature/feature-name**
+- **bugfix/bug-name**
 
-### How do I get set up? ###
+### Commands
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+- **!deck save [mode] [deckstring] [Pesho tempo Mage] [Class] [//comment]**
+- **!deck get [mode] [deckname]**
+- **!deck all [mode]**
+- **!deck all class [class] [//mode]**
+- **!deck delete [mode] [deckName]**
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+parameters that are tagged with // are optional
