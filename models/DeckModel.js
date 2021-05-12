@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 const DeckShema = new mongoose.Schema({
-    name: {
-        type: String,
-    },
-    class: {
-        type: String,
-    },
     gameMode: {
+        type: String,
+    },
+    deckName: {
+        type: String,
+    },
+    deckClass: {
         type: String,
     },
     deckString: {
         type: String,
     },
-    comments: {
+    deckComments: {
         type: String,
     }
 });
