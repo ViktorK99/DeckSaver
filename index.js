@@ -1,19 +1,21 @@
-const config = require('./config/config');
+const env = process.env.NODE_ENV || 'development';
+
+const config = require('./config/config.env')[env];
 const express = require('express');
 const Discord = require('discord.js');
 
-const client = new Discord.Client()
+const client = new Discord.Client();
 const app = express();
 
-require('./config/mongoose')()
+require('./config/mongoose')(config);
 
-client.on("ready", () => {
-    console.log(`Logged in as ${client.user.tag}!`)
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
   });
 
-client.on("message", (message) => {
+client.on('message', (message) => {
     console.log('yo');
 });
 
-client.login(config.development.discordToken);
-app.listen(config.development.port, console.log(`Listening on port ${config.development.port}! Now its up to you...`));
+client.login(config.discordToken);
+app.listen(config.port, console.log(`Listening on port ${config.port}! Now its up to you...`));
