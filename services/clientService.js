@@ -14,7 +14,7 @@ module.exports = (client) => {
 
             deckService.save(regexMessage.gameMode, regexMessage.deckClass, regexMessage.deckName, regexMessage.deckString, regexMessage.commentars)
                 .then((deck) => {
-                    msg.reply(`${deck.deckName} has been saved.`)
+                    msg.reply(`${deck.deckName} has been saved.`);
                 })
                 .catch((error) => { console.log(error); })
         } else if (rgxCommandGet.test(message)) {
@@ -22,7 +22,7 @@ module.exports = (client) => {
             
             deckService.get(gameMode, deckName)
                 .then((deck) => {
-                    if(deck == null ) throw 'Deck not Found';
+                    if (deck == null ) throw 'Deck not Found';
                     msg.reply(`${deck.deckName} -- ${deck.deckString}`);   
                 })
                 .catch((error) => {msg.reply(error)})
