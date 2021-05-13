@@ -18,6 +18,6 @@ const DeckShema = new mongoose.Schema({
     }
 });
 
-const deck = mongoose.model('Decks', DeckShema)
+const deck = mongoose.model('Decks', DeckShema);
 
 module.exports = deck;
