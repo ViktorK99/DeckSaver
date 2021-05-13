@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-
-module.exports = (config) => {
-    mongoose.connect(`mongodb+srv://vikzae:${config.dbPassword}@decksaver.q8dlh.mongodb.net/DeckSaver`, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+module.exports = () => {
+    mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
     
     const db = mongoose.connection;
 

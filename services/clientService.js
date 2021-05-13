@@ -9,13 +9,12 @@ module.exports = (client) => {
 
     client.on('message', (msg) => {
         let message = msg.content;
-        
         if (rgxCommandSave.test(message)) {
             let regexMessage = rgxCommandSave.exec(message).groups;
 
             deckService.save(regexMessage.gameMode, regexMessage.deckClass, regexMessage.deckName, regexMessage.deckString, regexMessage.commentars)
                 .then((deck) => {
-                    msg.reply(`${deck.deckName} has been saved.`);
+                    msg.reply(`${deck.deckName} has been saved.`)
                 })
                 .catch((error) => { console.log(error); })
         } else if (rgxCommandGet.test(message)) {

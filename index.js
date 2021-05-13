@@ -1,23 +1,13 @@
-const env = process.env.NODE_ENV || 'development';
+require('dotenv').config();
 
-const config = require('./config/config.env')[env];
 const express = require('express');
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
 const app = express();
 
-require('./config/mongoose')(config);
-
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-  });
-
-client.on('message', (message) => {
-    console.log('yo');
-});
-
+require('./config/mongoose')();
 require('./services/clientService')(client)
 
-client.login(config.discordToken);
-app.listen(config.port, console.log(`Listening on port ${config.port}! Now its up to you...`));
+client.login(process.env.DISCORD_TOKEN);
+app.listen(process.env.PORT, console.log(`Listening on port ${process.env.PORT}! Now its up to you...`));
