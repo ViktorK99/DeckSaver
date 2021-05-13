@@ -1,6 +1,6 @@
 const deckService = require("./deckService")
 
-let rgxCommandSave = /(?<botCommand>!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*) (?<deckString>\w*) ?(?<commentars>.*)/;
+let rgxCommandSave = /(?<botCommand>!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*) (?<deckString>\w*) ?(?<comments>.*)/;
 let rgxCommandGet = /(?<botCommand>!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>\w*)/;
 module.exports = (client) => {
     client.on('ready', () => {
@@ -10,9 +10,9 @@ module.exports = (client) => {
     client.on('message', (msg) => {
         let message = msg.content;
         if (rgxCommandSave.test(message)) {
-            let regexMessage = rgxCommandSave.exec(message).groups;
-
-            deckService.save(regexMessage.gameMode, regexMessage.deckClass, regexMessage.deckName, regexMessage.deckString, regexMessage.commentars)
+            let {gameMode, deckClass, deckName, deckString, comments} = rgxCommandSave.exec(message).groups;
+            // check if it has comments
+            deckService.save(gameMode, deckClass, deckName, deckString, comments)
                 .then((deck) => {
                     msg.reply(`${deck.deckName} has been saved.`);
                 })
