@@ -15,19 +15,27 @@ module.exports = (client) => {
 
         if (rgxCommandSave.test(message)) {
             let { gameMode, deckClass, deckName, deckString, comments } = rgxCommandSave.exec(message).groups;
-            deckService.save(gameMode, deckClass, deckName, deckString, comments)
-                .then((deck) => {
-                    msg.reply(`${deck.deckName} has been saved.`);
-                })
-                .catch((error) => { console.log(error); })
+            if (gameMode.toLowerCase() == 'classic' || gameMode.toLowerCase() == 'standard' || gameMode.toLowerCase() == 'wild' || gameMode.toLowerCase() == 'duels' || gameMode.toLowerCase() == 'casual') {
+                deckService.save(gameMode, deckClass, deckName, deckString, comments)
+                    .then((deck) => {
+                        msg.reply(`${deck.deckName} has been saved.`);
+                    })
+                    .catch((error) => { console.log(error); })
+            } else {
+                msg.reply('Deck Class must be Classic/Standard/Wild/Casual or Duels');
+            }
         } else if (rgxCommandGet.test(message)) {
             let { gameMode, deckName } = rgxCommandGet.exec(message).groups;
 
             deckService.get(gameMode, deckName)
                 .then((deck) => {
                     if (deck == null) throw 'Deck not Found';
-                    // check if it has comments
-                    msg.reply(`${deck.deckName} -- ${deck.deckString}`);
+
+                    if (deck.deckComments == '') {
+                        msg.reply(`${deck.deckName} -- ${deck.deckString}`);
+                    } else {
+                        msg.reply(`${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
+                    };
                 })
                 .catch((error) => { msg.reply(error) })
         } else if (rgxCommandAll.test(message)) {
@@ -40,7 +48,7 @@ module.exports = (client) => {
                             msg.reply(`${deck.deckName} -- ${deck.deckString}`);
                         } else {
                             msg.reply(`${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
-                        }
+                        };
                     })
                 })
                 .catch((err) => {msg.reply(err)})
