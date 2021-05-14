@@ -16,6 +16,7 @@ module.exports = (client) => {
 
         if (rgxCommandSave.test(message)) {
             let { gameMode, deckClass, deckName, deckString, comments } = rgxCommandSave.exec(message).groups;
+            
             if (gameMode.toLowerCase() == 'classic' || gameMode.toLowerCase() == 'standard' || gameMode.toLowerCase() == 'wild' || gameMode.toLowerCase() == 'duels' || gameMode.toLowerCase() == 'casual') {
                 deckService.save(gameMode, deckClass, deckName, deckString, comments)
                     .then((deck) => {
@@ -55,7 +56,7 @@ module.exports = (client) => {
                 .catch((err) => {msg.reply(err)})
         } else if (rgxCommandAllFromClass.test(message)) {
             let { deckClass, gameMode} = rgxCommandAllFromClass.exec(message).groups;
-            console.log(deckClass, gameMode);
+
             deckService.allFromClass(deckClass, gameMode)
                 .then(decks => {
                     decks.forEach((deck) => {
