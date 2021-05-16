@@ -16,15 +16,17 @@ module.exports = (client) => {
 
         if (rgxCommandSave.test(message)) {
             let { gameMode, deckClass, deckName, deckString, comments } = rgxCommandSave.exec(message).groups;
-            
-            if (gameMode.toLowerCase() == 'classic' || gameMode.toLowerCase() == 'standard' || gameMode.toLowerCase() == 'wild' || gameMode.toLowerCase() == 'duels' || gameMode.toLowerCase() == 'casual') {
+
+            gameMode = gameMode.toLowerCase();
+
+            if (gameMode == 'classic' || gameMode == 'standard' || gameMode == 'wild' || gameMode == 'duels' || gameMode == 'casual') {
                 deckService.save(gameMode, deckClass, deckName, deckString, comments)
                     .then((deck) => {
                         msg.reply(`${deck.deckName} has been saved.`);
                     })
-                    .catch((error) => { console.log(error);})
+                    .catch((error) => { msg.reply('There is error while saving buddy')})
             } else {
-                msg.reply('Deck Class must be Classic/Standard/Wild/Casual or Duels');
+                msg.reply('Deck format must be Classic/Standard/Wild/Casual or Duels');
             };
         } else if (rgxCommandGet.test(message)) {
             let { gameMode, deckName } = rgxCommandGet.exec(message).groups;
