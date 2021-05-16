@@ -77,7 +77,7 @@ module.exports = (client) => {
             
             deckService.deleteDeck(gameMode, deckClass, deckName)
                 .then((deck) => {
-                    msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed`)
+                    msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed`);
                 })
                 .catch((err) => {msg.reply(err)}) 
         }

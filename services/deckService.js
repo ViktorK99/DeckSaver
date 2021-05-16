@@ -35,7 +35,7 @@ const allFromClass = async (deckClass, gameMode) => {
 
 const deleteDeck = async (gameMode, deckClass, deckName) => {
     let deck = await deckModel.findOneAndRemove({gameMode: gameMode.toLowerCase(), deckClass: deckClass.toLowerCase(),deckName: deckName});
-    if(deck == null) throw 'Deck Not Found'
+    if(deck == null) throw 'Deck Not Found';
     return deck;
 }
 
