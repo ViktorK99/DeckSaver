@@ -51,7 +51,7 @@ const DeckShema = new mongoose.Schema({
                 return isBase64(string);
             },
             message: () => {
-                return `Invalide DeckString`;
+                return `Invalid DeckString`;
             }
         }
     },
