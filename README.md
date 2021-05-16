@@ -14,6 +14,6 @@ Branch naming should be the following:
 - **!deck get [mode] [deckname]**
 - **!deck all [mode]**
 - **!deck allClass [class] [//mode]**
-- **!deck delete [mode] [deckName]**
+- **!deck delete [mode] [deckClass] [deckName]**
 
 parameters that are tagged with // are optional

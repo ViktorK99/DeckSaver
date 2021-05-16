@@ -31,6 +31,12 @@ const allFromClass = async (deckClass, gameMode) => {
         if(decks.length == 0) throw 'Wrong class or there are no decks in this class!';
         return decks;
     }
+};
+
+const deleteDeck = async (gameMode, deckClass, deckName) => {
+    let deck = await deckModel.findOneAndRemove({gameMode: gameMode.toLowerCase(), deckClass: deckClass.toLowerCase(),deckName: deckName});
+    if(deck == null) throw 'Deck Not Found'
+    return deck;
 }
 
 module.exports = {
@@ -38,4 +44,5 @@ module.exports = {
     get: get,
     all: all,
     allFromClass: allFromClass,
+    deleteDeck: deleteDeck,
 };

@@ -1,10 +1,11 @@
 const deck = require("../models/deckModel");
 const deckService = require("./deckService")
 
-let rgxCommandSave = /(?<botCommand>!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*) (?<deckString>\w*) ?(?<comments>.*)/;
+let rgxCommandSave = /(?<botCommand>!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*) (?<deckString>[A-Za-z0-9+\/=]*) ?(?<comments>.*)/;
 let rgxCommandGet = /(?<botCommand>!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>\w*)/;
 let rgxCommandAll = /(?<botCommand>!deck) (?<command>all) (?<gameMode>\w*)/;
 let rgxCommandAllFromClass = /(?<botCommand>!deck) (?<command>allClass) (?<deckClass>\w*) ?(?<gameMode>\w*)?/;
+let rgxCommandDelete = /(?<botCommand>!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*)/
 
 module.exports = (client) => {
     client.on('ready', () => {
@@ -66,11 +67,19 @@ module.exports = (client) => {
                         if (deck.deckComments == '') {
                             msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} -- ${deck.deckString} `);
                         } else {
-                            msg.reply(`${deck.deckName}-- ${deck.gameMode.toUpperCase()} -- ${deck.deckComments} -- ${deck.deckString}`);
+                            msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} -- ${deck.deckComments} -- ${deck.deckString}`);
                         };
                     });
                 })
                 .catch((error) => {msg.reply(error)})
+        } else if (rgxCommandDelete.test(message)) {
+            let { gameMode, deckClass, deckName } = rgxCommandDelete.exec(message).groups;
+            
+            deckService.deleteDeck(gameMode, deckClass, deckName)
+                .then((deck) => {
+                    msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed`)
+                })
+                .catch((err) => {msg.reply(err)}) 
         }
     });
 }
