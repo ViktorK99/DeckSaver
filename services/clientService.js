@@ -18,16 +18,17 @@ module.exports = (client) => {
             let { gameMode, deckClass, deckName, deckString, comments } = rgxCommandSave.exec(message).groups;
 
             gameMode = gameMode.toLowerCase();
+            deckClass = deckClass.toLowerCase();
 
-            if (gameMode == 'classic' || gameMode == 'standard' || gameMode == 'wild' || gameMode == 'duels' || gameMode == 'casual') {
-                deckService.save(gameMode, deckClass, deckName, deckString, comments)
-                    .then((deck) => {
-                        msg.reply(`${deck.deckName} has been saved.`);
-                    })
-                    .catch((error) => { msg.reply('There is error while saving buddy')})
-            } else {
-                msg.reply('Deck format must be Classic/Standard/Wild/Casual or Duels');
-            };
+            deckService.save(gameMode, deckClass, deckName, deckString, comments)
+                .then((deck) => {
+                    msg.reply(`${deck.deckName} has been saved.`);
+                })
+                .catch((err) => {
+                    let error = Object.keys(err.errors).map(x => err.errors[x].properties.message);
+                    msg.reply(error[0]);
+                })
+            
         } else if (rgxCommandGet.test(message)) {
             let { gameMode, deckName } = rgxCommandGet.exec(message).groups;
 
@@ -49,9 +50,9 @@ module.exports = (client) => {
                 .then((decks) => {
                     decks.forEach((deck) => {
                         if (deck.deckComments == '') {
-                            msg.reply(`${deck.deckName} -- ${deck.deckString}`);
+                            msg.reply(`${deck.deckClass.toUpperCase()} -- ${deck.deckName} -- ${deck.deckString}`);
                         } else {
-                            msg.reply(`${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
+                            msg.reply(`${deck.deckClass.toUpperCase()} -- ${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
                         };
                     });
                 })
@@ -63,9 +64,9 @@ module.exports = (client) => {
                 .then(decks => {
                     decks.forEach((deck) => {
                         if (deck.deckComments == '') {
-                            msg.reply(`${deck.deckName} -- ${deck.deckString}`);
+                            msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} -- ${deck.deckString} `);
                         } else {
-                            msg.reply(`${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
+                            msg.reply(`${deck.deckName}-- ${deck.gameMode.toUpperCase()} -- ${deck.deckComments} -- ${deck.deckString}`);
                         };
                     });
                 })
