@@ -13,7 +13,7 @@ Branch naming should be the following:
 - **!deck save [mode] [Class] [Pesho tempo Mage] [deckstring] [//comment]**
 - **!deck get [mode] [deckname]**
 - **!deck all [mode]**
-- **!deck all class [class] [//mode]**
+- **!deck allClass [class] [//mode]**
 - **!deck delete [mode] [deckName]**
 
 parameters that are tagged with // are optional
