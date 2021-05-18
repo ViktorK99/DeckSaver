@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.5.3",
+    "discord.js-menu": "^2.3.1",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "is-base64": "^1.1.0",

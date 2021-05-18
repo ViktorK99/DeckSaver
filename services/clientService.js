@@ -1,11 +1,15 @@
 const deck = require("../models/deckModel");
-const deckService = require("./deckService")
+const deckService = require("./deckService");
+const discordReply = require('./discordPageService');
+const Discord = require('discord.js');
+const { Menu } = require('discord.js-menu');
 
-let rgxCommandSave = /(?<botCommand>!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*) (?<deckString>[A-Za-z0-9+\/=]*) ?(?<comments>.*)/;
-let rgxCommandGet = /(?<botCommand>!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>\w*)/;
-let rgxCommandAll = /(?<botCommand>!deck) (?<command>all) (?<gameMode>\w*)/;
-let rgxCommandAllFromClass = /(?<botCommand>!deck) (?<command>allClass) (?<deckClass>\w*) ?(?<gameMode>\w*)?/;
-let rgxCommandDelete = /(?<botCommand>!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*)/
+
+let rgxCommandSave = /(!deck) (?<command>\w*) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?) (?<deckString>(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)) ?(?<comments>.*)/;
+let rgxCommandGet = /(!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>.*)/;
+let rgxCommandAll = /(!deck) (?<command>all) (?<gameMode>\w*)/;
+let rgxCommandAllFromClass = /(!deck) (?<command>allClass) (?<deckClass>\w*) ?(?<gameMode>\w*)?/;
+let rgxCommandDelete = /(!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*)/
 
 module.exports = (client) => {
     client.on('ready', () => {
@@ -38,9 +42,30 @@ module.exports = (client) => {
                     if (deck == null) throw 'Deck not Found';
 
                     if (deck.deckComments == '') {
-                        msg.reply(`${deck.deckName} -- ${deck.deckString}`);
+                        const discordMessage = new Discord.MessageEmbed()
+                            .setColor('0099ff')
+                            .setTitle(deck.deckName)
+                            .setDescription(deck.gameMode.toUpperCase())
+                            .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+                            .addField(deck.deckClass.toUpperCase(), deck.deckString,)
+                            .setTimestamp()
+                            .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+
+                        msg.channel.send(discordMessage);
                     } else {
-                        msg.reply(`${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
+                        const discordMessage = new Discord.MessageEmbed()
+                            .setColor('0099ff')
+                            .setTitle(deck.deckName)
+                            .setDescription(deck.gameMode.toUpperCase())
+                            .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+                            .addFields(
+                                {name: deck.deckClass.toUpperCase(), value: deck.deckString},
+                                {name: 'Comments', value: deck.deckComments}
+                            )
+                            .setTimestamp()
+                            .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+
+                        msg.channel.send(discordMessage);
                     };
                 })
                 .catch((error) => {msg.reply(error)})
@@ -49,11 +74,17 @@ module.exports = (client) => {
 
             deckService.all(gameMode)
                 .then((decks) => {
-                    decks.forEach((deck) => {
-                        if (deck.deckComments == '') {
-                            msg.reply(`${deck.deckClass.toUpperCase()} -- ${deck.deckName} -- ${deck.deckString}`);
-                        } else {
-                            msg.reply(`${deck.deckClass.toUpperCase()} -- ${deck.deckName} -- ${deck.deckComments} -- ${deck.deckString}`);
+                    let pages = [];
+                    while (decks.length > 0) {
+                        pages.push(discordReply.pageMenu(decks, msg, pages.length));
+                    };
+                    let helpMenu = new Menu(msg.channel, msg.author.id, pages);
+
+                    helpMenu.start();
+
+                    helpMenu.on('pageChange', destination => {
+                        if (destination.name != 'Page1') {
+                            destination.reactions = Object.assign({'⬅️': 'previous'}, destination.reactions);
                         };
                     });
                 })
@@ -63,11 +94,18 @@ module.exports = (client) => {
 
             deckService.allFromClass(deckClass, gameMode)
                 .then(decks => {
-                    decks.forEach((deck) => {
-                        if (deck.deckComments == '') {
-                            msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} -- ${deck.deckString} `);
-                        } else {
-                            msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} -- ${deck.deckComments} -- ${deck.deckString}`);
+
+                    let pages = [];
+                    while (decks.length > 0) {
+                        pages.push(discordReply.pageMenu(decks, msg, pages.length));
+                    };
+                    let helpMenu = new Menu(msg.channel, msg.author.id, pages);
+
+                    helpMenu.start();
+
+                    helpMenu.on('pageChange', destination => {
+                        if (destination.name != 'Page1') {
+                            destination.reactions = Object.assign({'⬅️': 'previous'}, destination.reactions);
                         };
                     });
                 })
@@ -80,6 +118,6 @@ module.exports = (client) => {
                     msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed`);
                 })
                 .catch((err) => {msg.reply(err)}) 
-        }
+        } 
     });
 }
