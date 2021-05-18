@@ -24,7 +24,7 @@ const pageMenu = (decks, msg, pagesLength) => {
             }
         }),
         reactions: reactions
-    }
+    };
     return page;
 };
 
@@ -79,4 +79,4 @@ const reactionsCount = (decksInPage, msg, decks) => {
 
 module.exports = {
     pageMenu: pageMenu,
-}
+};
