@@ -10,10 +10,10 @@ Branch naming should be the following:
 
 ### Commands
 
-- **!deck save [mode] [Class] [Pesho tempo Mage] [deckstring] [//comment]**
+- **!deck save [mode] [Class] [PeshoTempoMage] [deckstring] [//comment]**
 - **!deck get [mode] [deckname]**
 - **!deck all [mode]**
 - **!deck allClass [class] [//mode]**
-- **!deck delete [mode] [deckName]**
+- **!deck delete [mode] [deckClass] [deckName]**
 
 parameters that are tagged with // are optional
