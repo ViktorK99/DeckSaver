@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 const isBase64 = require('is-base64');
+const correctDeckClass = ['deamonhunter', 'druid', 'hunter', 'mage', 'paladin', 'priest', 'rogue', 'shaman', 'warlock', 'warrior'];
+const correctGameModes = ['classic', 'standard', 'wild', 'duels', 'casual'];
 
 const DeckShema = new mongoose.Schema({
     gameMode: {
         type: String,
         required: true,
         validate: {
-            validator: (string) => {
-                let gameMode = string;
-                if (gameMode == 'classic' || gameMode == 'standard' || gameMode == 'wild' || gameMode == 'duels' || gameMode == 'casual') {
+            validator: (gameMode) => {
+                if (correctGameModes.includes(gameMode)) {
                     return true;
-                } else {
-                    return false;
-                };
+                }
+                return false;
             },
             message: () => {
                 return 'Deck format must be Classic/Standard/Wild/Casual/Duels';
@@ -27,16 +27,11 @@ const DeckShema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-            validator: (string) => {
-                let deckClass = string;
-                if(deckClass == 'demonhunter' || deckClass == 'druid' || deckClass == 'hunter' ||
-                   deckClass == 'mage' || deckClass == 'paladin' || deckClass == 'priest' || deckClass == 'rogue' ||
-                   deckClass == 'shaman' || deckClass == 'warlock' || deckClass == 'warrior') {
-
+            validator: (deckClass) => {
+                if(correctDeckClass.includes(deckClass)) {
                     return true;
-                } else {
-                    return false;
-                };
+                }
+                return false;
             },
             message: () => {
                 return `Deck Class must be DemonHunter/Druid/Hunter/Mage/Paladin/Priest/Rogue/Shaman/Warlock/Warrior`;
@@ -47,8 +42,8 @@ const DeckShema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-            validator: (string) => {
-                return isBase64(string);
+            validator: (deckString) => {
+                return isBase64(deckString);
             },
             message: () => {
                 return `Invalid DeckString`;

@@ -1,6 +1,6 @@
 const deck = require("../models/deckModel");
 const deckService = require("./deckService");
-const discordReply = require('./discordPageService');
+const discordPageService = require('./discordPageService');
 const Discord = require('discord.js');
 const { Menu } = require('discord.js-menu');
 
@@ -30,43 +30,28 @@ module.exports = (client) => {
                     msg.reply(`${deck.deckName} has been saved.`);
                 })
                 .catch((err) => {
-                    let error = Object.keys(err.errors).map(x => err.errors[x].properties.message);
-                    msg.reply(error[0]);
+                    msg.reply(Object.keys(err.errors).map(x => err.errors[x].properties.message)[0]);
                 })
             
         } else if (rgxCommandGet.test(message)) {
-            let { gameMode, deckName } = rgxCommandGet.exec(message).groups;
+            const { gameMode, deckName } = rgxCommandGet.exec(message).groups;
 
             deckService.get(gameMode, deckName)
                 .then((deck) => {
                     if (deck == null) throw 'Deck not Found';
+                    const discordMessage = new Discord.MessageEmbed()
+                    .setColor('0099ff')
+                    .setTitle(deck.deckName)
+                    .setDescription(deck.gameMode.toUpperCase())
+                    .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+                    .addField(deck.deckClass.toUpperCase(), deck.deckString,)
+                    .setTimestamp()
+                    .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
 
-                    if (deck.deckComments == '') {
-                        const discordMessage = new Discord.MessageEmbed()
-                            .setColor('0099ff')
-                            .setTitle(deck.deckName)
-                            .setDescription(deck.gameMode.toUpperCase())
-                            .setThumbnail('https://i.imgur.com/wSTFkRM.png')
-                            .addField(deck.deckClass.toUpperCase(), deck.deckString,)
-                            .setTimestamp()
-                            .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
-
-                        msg.channel.send(discordMessage);
-                    } else {
-                        const discordMessage = new Discord.MessageEmbed()
-                            .setColor('0099ff')
-                            .setTitle(deck.deckName)
-                            .setDescription(deck.gameMode.toUpperCase())
-                            .setThumbnail('https://i.imgur.com/wSTFkRM.png')
-                            .addFields(
-                                {name: deck.deckClass.toUpperCase(), value: deck.deckString},
-                                {name: 'Comments', value: deck.deckComments}
-                            )
-                            .setTimestamp()
-                            .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
-
-                        msg.channel.send(discordMessage);
+                    if (deck.deckComments != '') {
+                        discordMessage.fields.push({name: 'Comments', value: deck.deckComments});
                     };
+                        msg.channel.send(discordMessage);
                 })
                 .catch((error) => {msg.reply(error)})
         } else if (rgxCommandAll.test(message)) {
@@ -74,19 +59,7 @@ module.exports = (client) => {
 
             deckService.all(gameMode)
                 .then((decks) => {
-                    let pages = [];
-                    while (decks.length > 0) {
-                        pages.push(discordReply.pageMenu(decks, msg, pages.length));
-                    };
-                    let helpMenu = new Menu(msg.channel, msg.author.id, pages);
-
-                    helpMenu.start();
-
-                    helpMenu.on('pageChange', destination => {
-                        if (destination.name != 'Page1') {
-                            destination.reactions = Object.assign({'⬅️': 'previous'}, destination.reactions);
-                        };
-                    });
+                    discordPageService.createPage(decks, msg);
                 })
                 .catch((err) => {msg.reply(err)})
         } else if (rgxCommandAllFromClass.test(message)) {
@@ -94,24 +67,11 @@ module.exports = (client) => {
 
             deckService.allFromClass(deckClass, gameMode)
                 .then(decks => {
-
-                    let pages = [];
-                    while (decks.length > 0) {
-                        pages.push(discordReply.pageMenu(decks, msg, pages.length));
-                    };
-                    let helpMenu = new Menu(msg.channel, msg.author.id, pages);
-
-                    helpMenu.start();
-
-                    helpMenu.on('pageChange', destination => {
-                        if (destination.name != 'Page1') {
-                            destination.reactions = Object.assign({'⬅️': 'previous'}, destination.reactions);
-                        };
-                    });
+                    discordPageService.createPage(decks, msg);
                 })
                 .catch((error) => {msg.reply(error)})
         } else if (rgxCommandDelete.test(message)) {
-            let { gameMode, deckClass, deckName } = rgxCommandDelete.exec(message).groups;
+            const { gameMode, deckClass, deckName } = rgxCommandDelete.exec(message).groups;
             
             deckService.deleteDeck(gameMode, deckClass, deckName)
                 .then((deck) => {
