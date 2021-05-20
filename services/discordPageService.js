@@ -18,7 +18,6 @@ const pageMenu = (decks, msg, pagesLength) => {
                 name: 'Decks',
                 value: decksReply(decksInPage),
             }],
-            timestamp: new Date(),
             footer: {
                 text: 'Some footer text here',
                 icon_url: 'https://i.imgur.com/wSTFkRM.png'
