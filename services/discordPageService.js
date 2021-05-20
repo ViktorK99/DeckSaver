@@ -18,7 +18,6 @@ const pageMenu = (decks, msg, pagesLength) => {
                 name: 'Decks',
                 value: decksReply(decksInPage),
             }],
-            timestamp: new Date(),
             footer: {
                 text: 'Some footer text here',
                 icon_url: 'https://i.imgur.com/wSTFkRM.png'
@@ -49,7 +48,6 @@ const reactionsCount = (decksInPage, msg, decks) => {
                 .setDescription(deck.gameMode.toUpperCase())
                 .setThumbnail('https://i.imgur.com/wSTFkRM.png')
                 .addField(deck.deckClass.toUpperCase(), deck.deckString,)
-                .setTimestamp()
                 .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
 
             if (deck.deckComments != '') {
