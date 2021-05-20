@@ -49,7 +49,6 @@ const reactionsCount = (decksInPage, msg, decks) => {
                 .setDescription(deck.gameMode.toUpperCase())
                 .setThumbnail('https://i.imgur.com/wSTFkRM.png')
                 .addField(deck.deckClass.toUpperCase(), deck.deckString,)
-                .setTimestamp()
                 .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
 
             if (deck.deckComments != '') {
