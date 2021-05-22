@@ -1,4 +1,4 @@
-let deckModel ;
+let deckModel;
 
 const save = (gameMode, deckClass, deckName, deckString, deckComments, guildId) => {
     deckModel = require('../models/deckModel')(guildId);

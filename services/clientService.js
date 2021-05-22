@@ -14,7 +14,7 @@ module.exports = (client) => {
     client.on('ready', () => {
         console.log(`Logged in as ${client.user.tag}!`);
     });
-    
+
     client.on('message', (msg) => {
         let message = msg.content;
         if(msg.author.id == process.env.DISCORD_ID) return;
@@ -25,7 +25,7 @@ module.exports = (client) => {
             gameMode = gameMode.toLowerCase();
             deckClass = deckClass.toLowerCase();
 
-            deckService.save(gameMode, deckClass, deckName, deckString, comments,msg.guild.id)
+            deckService.save(gameMode, deckClass, deckName, deckString, comments, msg.guild.id)
                 .then((deck) => {
                     msg.reply(`${deck.deckName} has been saved.`);
                 })
@@ -56,7 +56,7 @@ module.exports = (client) => {
         } else if (rgxCommandAll.test(message)) {
             let { gameMode } = rgxCommandAll.exec(message).groups;
 
-            deckService.all(gameMode,msg.guild.id)
+            deckService.all(gameMode, msg.guild.id)
                 .then((decks) => {
                     discordPageService.createPage(decks, msg);
                 })
