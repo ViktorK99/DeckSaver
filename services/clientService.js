@@ -18,6 +18,7 @@ module.exports = (client) => {
 
     client.on('message', (msg) => {
         let message = msg.content;
+        if(msg.author.id == process.env.DISCORD_ID) return;
 
         if (rgxCommandSave.test(message)) {
             let { gameMode, deckClass, deckName, deckString, comments } = rgxCommandSave.exec(message).groups;
@@ -45,7 +46,6 @@ module.exports = (client) => {
                     .setDescription(deck.gameMode.toUpperCase())
                     .setThumbnail('https://i.imgur.com/wSTFkRM.png')
                     .addField(deck.deckClass.toUpperCase(), deck.deckString,)
-                    .setTimestamp()
                     .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
 
                     if (deck.deckComments != '') {
@@ -78,6 +78,20 @@ module.exports = (client) => {
                     msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed`);
                 })
                 .catch((err) => {msg.reply(err)}) 
-        } 
+        } else if (message == '!deck help' || message == '!deck') {
+            const discordMessage = new Discord.MessageEmbed()
+                    .setColor('0099ff')
+                    .setTitle('Help Options')
+                    .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+                    .addFields(
+                        {name: 'Save a deck', value: '!deck save [mode] [Class] [PeshoTempoMage] [deckstring] [(Optional)comment]'},
+                        {name: 'Get one deck', value: '!deck get [mode] [deckname]'},
+                        {name: 'Get all decks from a GameMode', value: '!deck all [mode]'},
+                        {name: 'Get all decks from a Class', value: '!deck allClass [class] [(Optional)mode]'},
+                        {name: 'Delete a deck', value: '!deck delete [mode] [deckClass] [deckName]'},
+                    )
+                    .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+            msg.channel.send(discordMessage);
+        }
     });
 }
