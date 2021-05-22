@@ -55,11 +55,8 @@ const deckModel = (guildId) => {
             type: String,
         }
     });
-
     mongoose.models = {};
 
     return mongoose.model(guildId, DeckShema);
-}
-
-
+};
 module.exports = deckModel;
