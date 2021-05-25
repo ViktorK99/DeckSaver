@@ -1,0 +1,24 @@
+<main>
+    <div class="container-xl mt-3">
+        <div class="row">
+            {{#each discordServer}}
+            <div class="col-6 col-xl-4">
+                <div class="card text-white bg-primary mb-3 border border-white rounded">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            {{#if icon}}
+                            <img src="https://cdn.discordapp.com/icons/{{id}}/{{icon}}.png?size=64" alt="DiscordIcon"
+                                class="rounded d-inline">
+                            {{/if}}
+                            <h4 class="card-title pb-3 text-align-center d-inline mx-auto">{{name}}</h4>
+                        </div>
+                        <div class="d-grid gap-2">
+                        <button type="button" hraf="/discordDecks/{{id}}" class="btn btn-dark mt-3 rounded">Decks: {{deckCount}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</main>
