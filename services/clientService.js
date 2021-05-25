@@ -3,12 +3,14 @@ const discordPageService = require('./discordPageService');
 const Discord = require('discord.js');
 const { Menu } = require('discord.js-menu');
 
-
 let rgxCommandSave = /(!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?) (?<deckString>(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)) ?(?<comments>.*)/;
 let rgxCommandGet = /(!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>.*)/;
 let rgxCommandAll = /(!deck) (?<command>all) (?<gameMode>\w*)/;
 let rgxCommandAllFromClass = /(!deck) (?<command>allClass) (?<deckClass>\w*) ?(?<gameMode>\w*)?/;
-let rgxCommandDelete = /(!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*)/
+let rgxCommandDelete = /(!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*)/;
+let rgxCommandEdit = /(!deck) (edit) (?<editDeckPart>\w*) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?) = (?<editedPart>.*)/;
+
+const editCommands = ['gameMode','deckName','deckClass','deckString','deckComments'];
 
 module.exports = (client) => {
     client.on('ready', () => {
@@ -91,6 +93,18 @@ module.exports = (client) => {
                     )
                     .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
             msg.channel.send(discordMessage);
+        } else if (rgxCommandEdit.test(message)) {
+            let { editDeckPart, gameMode, deckClass, deckName, editedPart } = rgxCommandEdit.exec(message).groups;
+
+            if(editCommand.includes(editDeckPart)) {
+                deckService.editDeck(gameMode, deckClass, deckName, editDeckPart, editedPart, msg.guild.id)
+                    .then(() => {
+                        msg.reply('Deck has been edited!');
+                    })
+                    .catch(err => msg.reply(err))
+            } else {
+                msg.reply('Edit commant must be !deck edit gameMode/deckName/deckClass/deckString/deckCommants = "What you want to be after edit"');
+            }
         }
     });
 }

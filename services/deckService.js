@@ -42,6 +42,13 @@ const deleteDeck = async (gameMode, deckClass, deckName, guildId) => {
     let deck = await deckModel.findOneAndRemove({gameMode: gameMode.toLowerCase(), deckClass: deckClass.toLowerCase(),deckName: deckName});
     if(deck == null) throw 'Deck Not Found';
     return deck;
+};
+
+const editDeck = async (gameMode, deckClass, deckName, editDeckPart, editedPart, guildId) => {
+    deckModel = require('../models/deckModel')(guildId);
+    let deck = await deckModel.findOneAndUpdate({gameMode:gameMode, deckClass:deckClass, deckName:deckName},{[editDeckPart]:editedPart});
+    if(deck == null) throw 'Deck Not Found';
+    return deck;
 }
 
 module.exports = {
@@ -50,4 +57,5 @@ module.exports = {
     all: all,
     allFromClass: allFromClass,
     deleteDeck: deleteDeck,
+    editDeck: editDeck,
 };
