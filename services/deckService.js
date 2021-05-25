@@ -1,7 +1,7 @@
 let deckModel;
 
 const save = (gameMode, deckClass, deckName, deckString, deckComments, guildId) => {
-    deckModel = require('../models/deckModel')(guildId);
+    deckModel = require('../models/DeckModel')(guildId);
     let deck = new deckModel({
         gameMode: gameMode.toLowerCase(),
         deckName: deckName,
@@ -13,21 +13,21 @@ const save = (gameMode, deckClass, deckName, deckString, deckComments, guildId) 
 };
 
 const get = (gameMode, deckName, guildId) => {
-    deckModel = require('../models/deckModel')(guildId);
+    deckModel = require('../models/DeckModel')(guildId);
     return deckModel.findOne({gameMode: gameMode.toLowerCase(), deckName: deckName}); 
 };
 
 const all = async (gameMode, guildId) => {
-    deckModel = require('../models/deckModel')(guildId);
-    let decks = await deckModel.find({gameMode: gameMode.toLowerCase()});
+    deckModel = require('../models/DeckModel')(guildId);
+    const decks = await deckModel.find({gameMode: gameMode.toLowerCase()});
     if(decks.length == 0) throw 'Wrong class or there are no decks in this class!';
     return decks;
 };
 
 const allFromClass = async (deckClass, gameMode, guildId) => {
-    deckModel = require('../models/deckModel')(guildId);
+    deckModel = require('../models/DeckModel')(guildId);
     if(gameMode) {
-        let decks = await deckModel.find({deckClass: deckClass.toLowerCase(), gameMode: gameMode.toLowerCase()});
+        const decks = await deckModel.find({deckClass: deckClass.toLowerCase(), gameMode: gameMode.toLowerCase()});
         if(decks.length == 0) throw 'Wrong class or there are no decks in this GameMode!';
         return decks;
     } else {
@@ -38,16 +38,19 @@ const allFromClass = async (deckClass, gameMode, guildId) => {
 };
 
 const deleteDeck = async (gameMode, deckClass, deckName, guildId) => {
-    deckModel = require('../models/deckModel')(guildId);
-    let deck = await deckModel.findOneAndRemove({gameMode: gameMode.toLowerCase(), deckClass: deckClass.toLowerCase(),deckName: deckName});
+    deckModel = require('../models/DeckModel')(guildId);
+    const deck = await deckModel.findOneAndRemove({gameMode: gameMode.toLowerCase(), deckClass: deckClass.toLowerCase(),deckName: deckName});
     if(deck == null) throw 'Deck Not Found';
     return deck;
 };
 
 const editDeck = async (gameMode, deckClass, deckName, editDeckPart, editedPart, guildId) => {
-    deckModel = require('../models/deckModel')(guildId);
-    let deck = await deckModel.findOneAndUpdate({gameMode:gameMode, deckClass:deckClass, deckName:deckName},{[editDeckPart]:editedPart});
+    deckModel = require('../models/DeckModel')(guildId);
+    console.log(editedPart);
+    const deck = await deckModel.findOneAndUpdate({gameMode:gameMode, deckClass:deckClass, deckName:deckName},{[editDeckPart]:editedPart});
+
     if(deck == null) throw 'Deck Not Found';
+
     return deck;
 }
 

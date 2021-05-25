@@ -3,12 +3,12 @@ const discordPageService = require('./discordPageService');
 const Discord = require('discord.js');
 const { Menu } = require('discord.js-menu');
 
-let rgxCommandSave = /(!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?) (?<deckString>(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)) ?(?<comments>.*)/;
-let rgxCommandGet = /(!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>.*)/;
-let rgxCommandAll = /(!deck) (?<command>all) (?<gameMode>\w*)/;
-let rgxCommandAllFromClass = /(!deck) (?<command>allClass) (?<deckClass>\w*) ?(?<gameMode>\w*)?/;
-let rgxCommandDelete = /(!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>\w*)/;
-let rgxCommandEdit = /(!deck) (edit) (?<editDeckPart>\w*) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?) = (?<editedPart>.*)/;
+const rgxCommandSave = /(!deck) (?<command>save) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?(?= AAE)) (?<deckString>(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==?|[A-Za-z0-9+\/]{3}=?)?) (?<comments>.*)/;
+const rgxCommandGet = /(!deck) (?<command>get) (?<gameMode>\w*) (?<deckName>.*)/;
+const rgxCommandAll = /(!deck) (?<command>all) (?<gameMode>\w*)/;
+const rgxCommandAllFromClass = /(!deck) (?<command>allClass) (?<deckClass>\w*) ?(?<gameMode>\w*)?/;
+const rgxCommandDelete = /(!deck) (?<command>delete) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.*)/;
+const rgxCommandEdit = /(!deck) (edit) (?<editDeckPart>\w*) (?<gameMode>\w*) (?<deckClass>\w*) (?<deckName>.+?) = (?<editedPart>.*)/;
 
 const editCommands = ['gameMode','deckName','deckClass','deckString','deckComments'];
 
@@ -45,9 +45,8 @@ module.exports = (client) => {
                     .setColor('0099ff')
                     .setTitle(deck.deckName)
                     .setDescription(deck.gameMode.toUpperCase())
-                    .setThumbnail('https://i.imgur.com/wSTFkRM.png')
-                    .addField(deck.deckClass.toUpperCase(), deck.deckString,)
-                    .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+                    .setThumbnail('https://i.imgur.com/Rd3ygmZ.png')
+                    .addField(deck.deckClass.toUpperCase(), deck.deckString,);
 
                     if (deck.deckComments != '') {
                         discordMessage.fields.push({name: 'Comments', value: deck.deckComments});
@@ -56,7 +55,7 @@ module.exports = (client) => {
                 })
                 .catch((error) => {msg.reply(error)})
         } else if (rgxCommandAll.test(message)) {
-            let { gameMode } = rgxCommandAll.exec(message).groups;
+            const { gameMode } = rgxCommandAll.exec(message).groups;
 
             deckService.all(gameMode, msg.guild.id)
                 .then((decks) => {
@@ -64,7 +63,7 @@ module.exports = (client) => {
                 })
                 .catch((err) => {msg.reply(err)})
         } else if (rgxCommandAllFromClass.test(message)) {
-            let { deckClass, gameMode} = rgxCommandAllFromClass.exec(message).groups;
+            const { deckClass, gameMode} = rgxCommandAllFromClass.exec(message).groups;
 
             deckService.allFromClass(deckClass, gameMode, msg.guild.id)
                 .then(decks => {
@@ -76,34 +75,41 @@ module.exports = (client) => {
             
             deckService.deleteDeck(gameMode, deckClass, deckName, msg.guild.id)
                 .then((deck) => {
-                    msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed`);
+                    msg.reply(`${deck.deckName} -- ${deck.gameMode.toUpperCase()} has been removed.`);
                 })
                 .catch((err) => {msg.reply(err)}) 
         } else if (message == '!deck help' || message == '!deck') {
             const discordMessage = new Discord.MessageEmbed()
                     .setColor('0099ff')
                     .setTitle('Help Options')
-                    .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+                    .setThumbnail('https://i.imgur.com/Rd3ygmZ.png')
                     .addFields(
-                        {name: 'Save a deck', value: '!deck save [mode] [Class] [PeshoTempoMage] [deckstring] [(Optional)comment]'},
+                        {name: 'Save a deck', value: '!deck save [mode] [Class] [Deck Name] [deckstring] [(Optional)comment]'},
                         {name: 'Get one deck', value: '!deck get [mode] [deckname]'},
                         {name: 'Get all decks from a GameMode', value: '!deck all [mode]'},
                         {name: 'Get all decks from a Class', value: '!deck allClass [class] [(Optional)mode]'},
                         {name: 'Delete a deck', value: '!deck delete [mode] [deckClass] [deckName]'},
+                        {name: 'Edit a deck',value: '!deck edit mode/name/class/deckString/Comment [Mode] [Class] [Name] = "What you want to be after edit"'},
                     )
-                    .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
             msg.channel.send(discordMessage);
         } else if (rgxCommandEdit.test(message)) {
-            let { editDeckPart, gameMode, deckClass, deckName, editedPart } = rgxCommandEdit.exec(message).groups;
+            const { editDeckPart, gameMode, deckClass, deckName, editedPart } = rgxCommandEdit.exec(message).groups;
+            const hui = {
+                name: 'deckName',
+                class: 'deckClass',
+                gameMode: 'gameMode',
+                deckString:'deckString',
+                comment: 'deckComments',
+            }
 
-            if(editCommand.includes(editDeckPart)) {
-                deckService.editDeck(gameMode, deckClass, deckName, editDeckPart, editedPart, msg.guild.id)
+            if(editCommands.includes(hui[editDeckPart])) {
+                deckService.editDeck(gameMode, deckClass, deckName, hui[editDeckPart], editedPart, msg.guild.id)
                     .then(() => {
                         msg.reply('Deck has been edited!');
                     })
                     .catch(err => msg.reply(err))
             } else {
-                msg.reply('Edit commant must be !deck edit gameMode/deckName/deckClass/deckString/deckCommants = "What you want to be after edit"');
+                msg.reply('Edit commant must be !deck edit mode/name/class/deckString/Comment = "What you want to be after edit"');
             }
         }
     });
