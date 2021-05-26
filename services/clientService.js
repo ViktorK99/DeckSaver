@@ -94,7 +94,7 @@ module.exports = (client) => {
             msg.channel.send(discordMessage);
         } else if (rgxCommandEdit.test(message)) {
             const { editDeckPart, gameMode, deckClass, deckName, editedPart } = rgxCommandEdit.exec(message).groups;
-            const hui = {
+            const commandToText = {
                 name: 'deckName',
                 class: 'deckClass',
                 gameMode: 'gameMode',
@@ -102,8 +102,8 @@ module.exports = (client) => {
                 comment: 'deckComments',
             }
 
-            if(editCommands.includes(hui[editDeckPart])) {
-                deckService.editDeck(gameMode, deckClass, deckName, hui[editDeckPart], editedPart, msg.guild.id)
+            if(editCommands.includes(commandToText[editDeckPart])) {
+                deckService.editDeck(gameMode, deckClass, deckName, commandToText[editDeckPart], editedPart, msg.guild.id)
                     .then(() => {
                         msg.reply('Deck has been edited!');
                     })
