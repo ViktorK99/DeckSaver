@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 module.exports = (app) => {
-    
     app.engine('hbs', handlebars({
         extname:'hbs'
     }));
