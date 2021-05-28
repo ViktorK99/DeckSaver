@@ -12,16 +12,12 @@ const pageMenu = (decks, msg, pagesLength) => {
             color: 0x0099ff,
             title: `Page: ${pagesLength + 1}`,
             thumbnail: {
-                url: 'https://i.imgur.com/wSTFkRM.png',
+                url: 'https://i.imgur.com/Rd3ygmZ.png',
             },
             fields: [{
                 name: 'Decks',
                 value: decksReply(decksInPage),
             }],
-            footer: {
-                text: 'Some footer text here',
-                icon_url: 'https://i.imgur.com/wSTFkRM.png'
-            }
         }),
         reactions: reactions
     };
@@ -46,9 +42,8 @@ const reactionsCount = (decksInPage, msg, decks) => {
                 .setColor('0099ff')
                 .setTitle(deck.deckName)
                 .setDescription(deck.gameMode.toUpperCase())
-                .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+                .setThumbnail('https://i.imgur.com/Rd3ygmZ.png')
                 .addField(deck.deckClass.toUpperCase(), deck.deckString,)
-                .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
 
             if (deck.deckComments != '') {
                 discordMessage.fields.push({name: 'Comments', value: deck.deckComments});
