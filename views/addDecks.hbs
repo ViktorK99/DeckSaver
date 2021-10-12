@@ -1,0 +1,58 @@
+{{#if error}}
+<div class="alert alert-dismissible alert-danger">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <strong>Something went Wrong</strong>
+</div>
+{{/if}}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <form action="/discord/addDecks" method="POST">
+            <fieldset class="fildset mx-auto">
+                <legend class="text-center text-white">Save Deck</legend>
+                <div class="form-group col-12 border border-2 border-primary">
+                    <input type="text" class="form-control " id="deckName" placeholder="Deck Name" name="deckName">
+                </div>
+                <div class="form-group col-12">
+                    <label for="deckClass" class="form-label mt-4 fs-4 text-center text-white">Select Class</label>
+                    <select class="form-select border border-2 border-primary" id="deckClass" name="deckClass">
+                        <option>Demon Hunter</option>
+                        <option>Druid</option>
+                        <option>Hunter</option>
+                        <option>Mage</option>
+                        <option>Priest</option>
+                        <option>Rogue</option>
+                        <option>Shaman</option>
+                        <option>Warlock</option>
+                        <option>Warrior</option>
+                    </select>
+                </div>
+                <div class="form-group col-12">
+                    <label for="deckMode" class="form-label mt-4 fs-4 text-white">Select GameMode</label>
+                    <select class="form-select border border-2 border-primary" id="deckMode" name="gameMode">
+                        <option>Standard</option>
+                        <option>Wild</option>
+                        <option>Classic</option>
+                        <option>Duels</option>
+                    </select>
+                </div>
+                <div class="form-group col-12 mt-3 border border-2 border-primary">
+                    <input type="text" class="form-control" id="deckString" placeholder="Deck String" name="deckString">
+                </div>
+                <div class="form-group col-12 mt-3 border border-2 border-primary" >
+                    <input type="text" class="form-control" id="comment" placeholder="Add Comment (optional)" name="deckComment">
+                </div>
+                <div class="form-group col-12">
+                    <label for="selectServer" class="form-label mt-4 fs-4 text-white">Select Server</label>
+                    <select class="form-select border border-2 border-primary" id="selectServer" name="guildId">
+                        {{#each discordServer}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="mt-3 col-12 d-flex justify-content-center">
+                    <input type="submit" value="Save Deck" class="btn btn-outline-light saveDeckButton"></input>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

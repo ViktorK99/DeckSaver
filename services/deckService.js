@@ -8,6 +8,7 @@ const save = (gameMode, deckClass, deckName, deckString, deckComments, guildId) 
         deckClass: deckClass.toLowerCase(),
         deckString: deckString,
         deckComments: deckComments,
+        guildId: guildId,
     });
     return deck.save();
 };

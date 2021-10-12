@@ -1,5 +1,5 @@
 const express = require('express');
-const handlebars = require('express-handlebars');
+let handlebars = require('express-handlebars');
 const session = require('express-session')
 const passport = require('passport')
 const bodyParser = require('body-parser');
@@ -7,7 +7,12 @@ const cookieParser = require('cookie-parser');
 
 module.exports = (app) => {
     app.engine('hbs', handlebars({
-        extname:'hbs'
+        extname:'hbs', 
+        helpers: {
+            toLowerCase: function(str) {
+                return str.toLowerCase();
+            }
+        }
     }));
 
     app.set('view engine','hbs');
@@ -27,4 +32,6 @@ module.exports = (app) => {
 
     app.use(passport.initialize());
     app.use(passport.session());
+
+    app.use(express.json()) 
 };

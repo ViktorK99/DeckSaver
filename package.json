@@ -14,6 +14,7 @@
     "bootstrap": "^5.0.1",
     "bootswatch": "^5.0.1",
     "cookie-parser": "^1.4.5",
+    "deckstrings": "^2.2.1",
     "discord.js": "^12.5.3",
     "discord.js-menu": "^2.3.1",
     "dotenv": "^9.0.2",
@@ -24,9 +25,10 @@
     "gulp-sass": "^4.1.0",
     "is-base64": "^1.1.0",
     "mongoose": "^5.12.8",
-    "node-sass": "^6.0.0",
+    "node-sass": "^6.0.1",
     "nodemon": "^2.0.7",
     "passport": "^0.4.1",
-    "passport-discord": "^0.1.4"
+    "passport-discord": "^0.1.4",
+    "sunwell": "^0.10.0"
   }
 }

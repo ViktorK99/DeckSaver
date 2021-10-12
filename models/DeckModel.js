@@ -53,6 +53,9 @@ const deckModel = (guildId) => {
         },
         deckComments: {
             type: String,
+        },
+        guildId: {
+            type: String,
         }
     });
     mongoose.models = {};

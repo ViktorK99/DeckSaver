@@ -1,12 +1,55 @@
-<div class="container mt-3">
+<div class="modal fade" id="modal">
+    <div class="modal-dialog modal-xs mx-auto" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark border-0">
+                <h5 class="modal-title text-white"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <a type="button" id="comment-popover" class="btn btn-secondary" title="" data-bs-container="body" data-bs-toggle="popover"
+                    data-bs-placement="left" data-bs-content="1"
+                    data-bs-original-title="">Comments</a>
+                <a type="button" id="deck-info-popover" class="btn btn-secondary" title="" data-bs-container="body"
+                    data-bs-toggle="popover" data-bs-placement="right"
+                    data-bs-content="Hunter"
+                    data-bs-original-title="Wild">Deck Info</a>
+                <div class="d-flex justify-content-center">
+                    <div class="card text-white bg-primary cards">
+                        <div class="card-header bg-dark d-grid gap-2">
+                            <button id="deckString" type="button" class="btn btn-info rounded" data-deck-string="">Copy
+                                Deck String</button>
+                        </div>
+                        <div id="card-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{#if discordDecks}}
+<div class="container-lg mt-3">
     <div class="row">
         {{#each discordDecks}}
-            <div class="list-group col-12 col-md-4 mb-3">
-                <a href="#" class="list-group-item list-group-item-action active disabled">{{@key}}</a>
-                {{#each this}}
-                <a href="#" class="list-group-item list-group-item-action">{{this.deckName}}</a>
-                {{/each}}
-            </div>
+        <div class="list-group col-12 col-md-6 col-lg-3 mb-3 px-0 px-md-2">
+            <button href="#"
+                class="list-group-item list-group-item-action active disabled text-center rounded">{{@key}}</button>
+            {{#each this}}
+            <button id="click" class="list-group-item list-group-item-action rounded zoom" data-bs-toggle="modal"
+                data-bs-target="#modal">
+                <div>
+                    <span data-guild-id="{{this.guildId}}" data-deck-id="{{this._id}}"
+                        class="cardText">{{this.deckName}}</span>
+                    <span class="badge rounded-pill bg-info viewDeck">View Deck</span>
+                </div>
+            </button>
+            {{/each}}
+        </div>
         {{/each}}
     </div>
 </div>
+{{else}}
+<p>Please Login!</p>
+{{/if}}
+<script type="module" src="/scripts/main.js"></script>

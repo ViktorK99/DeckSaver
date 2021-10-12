@@ -1,0 +1,109 @@
+@import "./_variables.scss";
+
+.cardContainer {
+    height:40px;
+}
+.cardImage {
+    height: 130%;
+}
+.backgroundCard {
+    line-height: 40px;
+    position: absolute;
+    height: 100%;
+    width: 72%;
+    background: linear-gradient(65deg,#313109,#313131 calc(100% - 96px),rgba(49,49,49,0) calc(100% - 26px),rgba(49,49,49,0));
+}
+.cardFrame {
+    position: relative;
+    border: 1px solid #000;
+    height: 100%;
+    overflow: hidden;
+}
+.cardCost {
+    font-size: 25px;
+    height: 40px;
+    width: 40px;
+    float: left;
+    position: relative;
+    border-style: solid;
+    border-color: #000;
+    border-width: 1px 0 1px 1px;
+}
+.cardCount {
+    -webkit-text-stroke: 1px black;
+    line-height: 40px;
+    color: white;
+    position: absolute;
+    right: 0;
+    font-size: 35px;
+    height: 40px;
+    width: 40px;
+}
+.cardText {
+    padding-left: 5px;
+    font-size: 15px;
+}
+.rarity-common {
+    background: $gray-600;
+}
+.rarity-rare {
+    background: $blue;
+}
+.rarity-epic {
+    background: $purple;
+}
+.rarity-legendary {
+    background:$orange;
+}
+.zoom {
+    background-color: white;
+    transition: transform .2s; /* Animation */
+    margin-bottom: 1px;
+  
+  &:hover {
+    transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  }
+}
+
+.zoom:hover ~ .list-group {
+    transform: scale(0.95);
+}
+
+.viewDeck {
+    display: inline-block;
+    position:absolute;
+    right: 0;
+}
+
+.spacingButtons {
+    margin-right: 5px;
+}
+
+.deckContainer {
+    position: absolute;
+    
+}
+
+.modal-body {
+    padding: 0px;
+}
+
+.modal-dialog {
+    width: 300px
+}
+
+.card {
+    width: 300px;
+}
+
+.list-group {
+    overflow: hidden;
+}
+
+.fildset {
+    max-width: 400px;
+}
+
+.saveDeckButton {
+    background :#1a1a1a
+}
